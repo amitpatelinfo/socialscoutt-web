@@ -21,20 +21,19 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="container">
+    <div class="container fill">
       <div class="header">
         <ul class="nav nav-pills pull-right">
-          <li class="active"><a ng-href="#">Home</a></li>
-          <li><a ng-href="#/about">About</a></li>
-          <li><a ng-href="#">Contact</a></li>
+          <li class="active"><span ui-view="accountView@dashboard"></span></li>
         </ul>
-        <h3 class="text-muted">socialscouttWeb</h3>
+        <img class="titleImage" src="images/socialscouts.png" alt="Social Scouts">
+        <span class="text-muted" style="font-size: 33px;"><strong>Social Scouts</strong></span>
       </div>
 
-      <div ng-view=""></div>
+      <div ui-view=""></div>
 
       <div class="footer">
-        <p><span class="glyphicon glyphicon-heart"></span> from the Yeoman team</p>
+        <p>&copy; 2014 Synerzip Softech. All Rights Reserved</p>
       </div>
     </div>
 
@@ -68,13 +67,21 @@
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/main.js"></script>
-        <script src="scripts/controllers/about.js"></script>
-        <!-- endbuild -->
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/app.js"></script>
+    <!--START : Load all services file here-->
+    <script src="scripts/services/loginService.js"></script>
+    <!--END : Load all services file here-->
+
+    <!--START : Load all controllers here-->
+    <script src="scripts/controllers/login.js"></script>
+    <script src="scripts/controllers/dashboard.js"></script>
+    <script src="scripts/controllers/program.js"></script>
+    <!--END : Load all controllers here-->
+    <!-- endbuild -->
 </body>
 </html>
