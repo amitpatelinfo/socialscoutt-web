@@ -7,10 +7,15 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
+var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
 module.exports = function (grunt) {
 
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
+
+  //Load Connect Proxy task
+  grunt.loadNpmTasks('grunt-connect-proxy');
+  grunt.loadNpmTasks('grunt-contrib-connect');
 
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
@@ -69,11 +74,22 @@ module.exports = function (grunt) {
         port: 9000,
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: 'localhost',
+        //hostname: '127.0.0.1',
         livereload: 35729
       },
+      proxies:[
+        {
+          context:'/login',
+          host:'172.25.30.46',
+          port: 8080,
+          https: false,
+          changeOrigin: true
+        }
+      ],
       livereload: {
         options: {
           open: true,
+          //open: 'http://localhost:<%= connect.options.port %>',
           middleware: function (connect) {
             return [
               connect.static('.tmp'),
@@ -81,7 +97,8 @@ module.exports = function (grunt) {
                 '/bower_components',
                 connect.static('./bower_components')
               ),
-              connect.static(appConfig.app)
+              connect.static(appConfig.app),
+              proxySnippet
             ];
           }
         }
@@ -357,7 +374,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
-      return grunt.task.run(['build', 'connect:dist:keepalive']);
+      return grunt.task.run(['configureProxies:server', 'build', 'connect:dist:keepalive']);
     }
 
     grunt.task.run([
@@ -365,6 +382,7 @@ module.exports = function (grunt) {
       'wiredep',
       'concurrent:server',
       'autoprefixer',
+      'configureProxies:server',
       'connect:livereload',
       'watch'
     ]);
@@ -389,6 +407,7 @@ module.exports = function (grunt) {
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer',
+    'configureProxies:server',
     'concat',
     'ngAnnotate',
     'copy:dist',
